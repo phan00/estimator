@@ -8,7 +8,7 @@ set(CMAKE_BUILD_TYPE "Debug")
 add_subdirectory(pybind11)
 pybind11_add_module(${PROJECT_NAME}
     MODULE
-        bindings.cpp
+        ./src/bindings.cpp
 )
 message(STATUS "pybind11_INCLUDE_DIRS: ${pybind11_INCLUDE_DIRS}")
 
@@ -23,12 +23,11 @@ set(TO_BIN ${CMAKE_CURRENT_SOURCE_DIR}/../scripts)
 message(STATUS "TO_BIN: ${TO_BIN}")
 
 install(TARGETS ${PROJECT_NAME}
-    LIBRARY DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../scripts
+    LIBRARY DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/scripts
 )
 
-find_package(armadillo CONFIG REQUIRED)
 find_package(carma CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE armadillo::armadillo carma::carma)
+target_link_libraries(${PROJECT_NAME} PRIVATE armadillo carma::carma)
 
 add_custom_target(install_${PROJECT_NAME}
     COMMAND ${CMAKE_COMMAND} --build . --target install

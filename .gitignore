@@ -1,5 +1,6 @@
 # ignore all .a files
 *.a
+*.so
 CMakeLists.txt.autosave
 CMakeLists.txt.user
 
