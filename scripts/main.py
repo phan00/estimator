@@ -40,7 +40,7 @@ data_const6 = np.full(num_samples//4, 5) # 5.8
 data_const4 = np.full(num_samples//4, 5) # 4.2
 
 data = np.concatenate((data_const5,data_const6,data_const4))
-repeat_num = num_samples # 50
+repeat_num = 50
 num_iterations = 1000  # Количество итераций
 var_kf_step = np.zeros(num_samples)  # Вариация оценки Калмана по шагам
 var_kf_step_noise = np.zeros(num_samples)
