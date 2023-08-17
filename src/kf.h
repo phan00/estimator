@@ -1,10 +1,6 @@
 #pragma once
 
 #include <armadillo>
-#include <carma>
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
-
 
 namespace Estimator {
 
@@ -22,12 +18,9 @@ struct KalmanFilterMath
                  M& xp,
                  M& Pp,
                  M& zp) {
-
-        G.print("G");
-        Q.print("Q");
         xp = A*x + B*u;
         Pp = A*P*trans(A) + G*Q*trans(G);
-        //Pp = (Pp + trans(Pp))/2.;
+        Pp = (Pp + trans(Pp))/2.;
         zp = H*x;
     }
 
@@ -41,30 +34,11 @@ struct KalmanFilterMath
                  M& xc,
                  M& Pc) {
 
-
-        H.print("H");
-        Pp.print("Pp");
-        R.print("R");
-
         M S = H*Pp*trans(H) + R;
-        S.print("S");
-
         M K = Pp*trans(H)*inv(S);
-
-
-        K.print("K");
-        xp.print("xp");
-        z.print("z");
-        zp.print("zp");
-
         xc = xp + K * (z - zp);
-
-
-
         Pc = Pp - K * S * trans(K);        
-        //Pc = (Pc + trans(Pc))/2.;
-        Pc.print("Pc");
-
+        Pc = (Pc + trans(Pc))/2.;
     }
 };
 

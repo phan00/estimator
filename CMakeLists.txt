@@ -1,38 +1,46 @@
 cmake_minimum_required(VERSION 3.10)
 project(estimator)
 
+set(CMAKE_BUILD_TYPE "Debug")
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_BUILD_TYPE "Debug")
+find_package(Armadillo REQUIRED)
 
-add_subdirectory(pybind11)
-pybind11_add_module(${PROJECT_NAME}
-    MODULE
-        ./src/bindings.cpp
-)
-message(STATUS "pybind11_INCLUDE_DIRS: ${pybind11_INCLUDE_DIRS}")
+if(Armadillo_FOUND)
+    message(STATUS "------------------------------------")
+    message(STATUS "Armadillo is FOUND:")
+    message(STATUS "include: ${ARMADILLO_INCLUDE_DIRS}")
+    message(STATUS "libraries: ${ARMADILLO_LIBRARIES}")
+    message(STATUS "version: ${ARMADILLO_VERSION_STRING}")
+    message(STATUS "------------------------------------")
+else(Armadillo_FOUND)
+    message("Armadillo is NOT found:")
+endif(Armadillo_FOUND)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    PREFIX "${PYTHON_MODULE_PREFIX}"
-    SUFFIX "${PYTHON_MODULE_EXTENSION}"
-)
+include(cmake/Findpybind11.cmake)
+include(cmake/FindGTest.cmake)
 
-set(FROM_BIN ${CMAKE_CURRENT_BINARY_DIR}/${PYTHON_MODULE_PREFIX}${PROJECT_NAME}${PYTHON_MODULE_EXTENSION})
-message(STATUS "FROM_BIN: ${FROM_BIN}")
-set(TO_BIN ${CMAKE_CURRENT_SOURCE_DIR}/../scripts)
-message(STATUS "TO_BIN: ${TO_BIN}")
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-install(TARGETS ${PROJECT_NAME}
-    LIBRARY DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/scripts
-)
+if (pybind11_FOUND)
+    message(STATUS "-----------------")
+    message(STATUS "PyBind11 is found")
+    message(STATUS "-----------------")
+    add_subdirectory(bindpy)
+else (pybind11_FOUND)
+    message(STATUS "----------------------")
+    message(STATUS "PyBind11 is not found!")
+    message(STATUS "----------------------")
+endif (pybind11_FOUND)
 
-find_package(carma CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE armadillo carma::carma)
-
-add_custom_target(install_${PROJECT_NAME}
-    COMMAND ${CMAKE_COMMAND} --build . --target install
-    DEPENDS ${PROJECT_NAME}
-    COMMENT "Installing ${PROJECT_NAME}"
-)
-
-add_dependencies(install_${PROJECT_NAME} ${PROJECT_NAME})
+if (GTest_FOUND)
+    message(STATUS "---------------------")
+    message(STATUS "Google Test is found!")
+    message(STATUS "---------------------")
+    enable_testing()
+    add_subdirectory(test)
+else(GTest_FOUND)
+    message(STATUS "-------------------------")
+    message(STATUS "Google Test is not found!")
+    message(STATUS "-------------------------")
+endif(GTest_FOUND)

@@ -1,9 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from arr2ltx import to_latex
+
 
 import estimator as e
 import math
 
+
+#%% Инициализируем Фильтра Калмана
+#%markdown
 meas_var = 4.
 dt = 0.2
 process_var = 1.
@@ -15,6 +20,7 @@ Af = np.array([[1., dt,  0., 0.],
                [0., 1.,  0., 0.],
                [0., 0.,  1., dt],
                [0., 0.,  0., 1.]])
+
 
 H = np.array([[1., 0., 0., 0.],
               [0., 0., 1., 0.]])
@@ -30,7 +36,11 @@ G = np.array([[dt**2/2, 0],
              [0, dt**2/2],
              [0, dt]])
 
-trueInitialState = np.array([10, 2, 30, 2])
+trueInitialState = np.array([10., 2., 30., 2.])
+trueMeas = H@trueInitialState
+trueMeas = trueMeas[:, np.newaxis]
+
+to_latex(trueMeas)
 
 
 def make_kalman_filter(measurement):
@@ -85,12 +95,18 @@ def calc_std_err(data, make_estimator):
     var_err /= num_iterations
     return np.sqrt(var_err)
 
-
-if __name__ == "__main__":
-    data = np.zeros((trueInitialState.shape[0], 40))
-    data[:, 0] = trueInitialState.T
+def make_true_data(initial):
+    data = np.zeros((initial.shape[0], 40))
+    data[:, 0] = initial.T
     for i in range(data.shape[1]-1):
         data[:, i+1] = np.squeeze(Ae @ data[:, i][:, np.newaxis])
+    return data
+
+
+if __name__ == "__main__":
+    
+
+    data = make_true_data(trueInitialState)    
     data_noise = add_process_noise(data, G@Qe@G.T)
     est, meas = step(data_noise, make_kalman_filter)
 

@@ -1,0 +1,42 @@
+[settings]
+    arch=x86_64
+    build_type=Debug
+    compiler=gcc
+    compiler.libcxx=libstdc++
+    compiler.version=12
+    os=Linux
+
+[requires]
+    gtest/1.Y.Z
+    pybind11/2.Y.Z
+
+[options]
+
+
+[full_settings]
+    arch=x86_64
+    arch_build=x86_64
+    build_type=Debug
+    compiler=gcc
+    compiler.libcxx=libstdc++
+    compiler.version=12
+    os=Linux
+    os_build=Linux
+
+[full_requires]
+    gtest/1.14.0:af91190dc1608e3302427eaadb430f4b18543bfb
+    pybind11/2.10.1:5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9
+
+[full_options]
+    gtest:build_gmock=True
+    gtest:disable_pthreads=False
+    gtest:fPIC=True
+    gtest:hide_symbols=False
+    gtest:no_main=False
+    gtest:shared=False
+
+[recipe_hash]
+
+
+[env]
+    LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH

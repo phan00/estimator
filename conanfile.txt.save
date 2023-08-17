@@ -1,0 +1,8 @@
+[requires]
+openblas/0.3.20
+armadillo/12.2.0
+pybind11/2.10.4
+gtest/* 
+
+[generators]
+cmake_find_package
