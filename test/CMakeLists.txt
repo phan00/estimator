@@ -5,7 +5,10 @@ message(STATUS "libraries: ${GTest_LIBRARIES}")
 
 include_directories(${GTest_INCLUDES})
 
-set(sources_list_test test.cpp test_ekf.cpp)
+set(sources_list_test
+    test.cpp
+    test_ekf.cpp
+    test_crossover_angle.cpp)
 
 add_executable(test_estimator ${sources_list_test})
 target_link_libraries(test_estimator ${GTest_LIBRARIES} pthread armadillo)

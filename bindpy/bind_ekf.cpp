@@ -31,7 +31,7 @@ class EkfBind {
 
         py::tuple correctMeasureModel(py::array_t<double>& measurement) {
             arma::Mat<double> z = carma::arr_to_mat(measurement);
-            auto ret = ekf_.correct(z, Models::measureModel<arma::Mat<double>>);
+            auto ret = ekf_.correct(z, Models::measureModel<arma::Mat<double>>, z);
             return py::make_tuple(carma::mat_to_arr(ret.first),
                                   carma::mat_to_arr(ret.second));
         }

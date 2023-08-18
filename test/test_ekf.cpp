@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
 #include "ekf.h"
 
+#include <gtest/gtest.h>
 
 TEST (EKF, ExtendedKalmanFilterMath) {
     // init
